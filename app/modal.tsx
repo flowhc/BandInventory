@@ -1,29 +1,158 @@
-import { Link } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import axios from 'axios';
+import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LoadingScreen from '../components/loading';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+interface Variation {
+  id: number;
+  name: string;
+  quantity: number;
+}
+
+const VARIATIONS: Variation[] = [
+  { id: 1, name: 'Variation 1', quantity: 5 },
+  { id: 2, name: 'Variation 2', quantity: 3 },
+  // Mehr Variationen
+];
 
 export default function ModalScreen() {
+
+  const {id, name}  = useLocalSearchParams();
+  const [data, setData] = useState<Variation[]>(VARIATIONS);
+  const [loading, setLoading] = useState(true);
+
+  const endpoint = 'http://localhost:8080/api/v1/products';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(endpoint +'/variation/'+ id);
+        setData(response.data);
+        console.log("API VARIATIONS Call success")
+      } catch (error) {
+        console.log("API VARIATIONS Call crashed")
+        console.error(error);
+      } finally {
+        setLoading(false);
+        console.log("API VARIATIONS Call success 2")
+
+      }
+    };
+    fetchData();
+  }, []);
+
+ const handlePress = async (variation: number, endpoint: string, increase: boolean) => {
+  const bodyData = {
+    id: id,
+    variationId: variation,
+    increase: increase
+  };
+
+  try {
+    const response = await axios.post(endpoint, bodyData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    setData(response.data);
+    console.log(response.data);
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Daten:', error);
+  }
+};
+
+
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">This is a modal</ThemedText>
-      <Link href="/" dismissTo style={styles.link}>
-        <ThemedText type="link">Go to home screen</ThemedText>
-      </Link>
-    </ThemedView>
+    <ImageBackground
+      style={styles.background}
+      source={require('../assets/images/background.jpg')}
+    >{!loading ? (
+    <View style={styles.container}>
+      <View style={styles.item}>
+        <Text style={styles.header}>Details for {name}</Text>
+      </View>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text style={styles.title}>{item.name}: {item.quantity}</Text>
+            <View style={styles.buttonContainer}>
+              <View style={styles.buttonWrapper}>
+                <TouchableOpacity style={styles.button} onPress={() => handlePress(item.id, endpoint, true)} >
+                  <Text style={styles.buttonText}>Add</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.buttonWrapper}>
+                <TouchableOpacity style={styles.button} onPress={() => handlePress(item.id, endpoint, false)} >
+                  <Text style={styles.buttonText}>Remove</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        )}
+      />
+    </View>
+    ):(
+      <LoadingScreen/>
+    )}
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+    marginTop: 16,
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  item: {
+    backgroundColor: '#000000',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 15,
+  },
+    background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    marginTop: 20,
+    flexDirection: 'row', // Horizontale Ausrichtung der Kinder
+    justifyContent: 'space-around', // Verteilung der Buttons
+    alignItems: 'center', // Vertikale Ausrichtung der Buttons
+  },
+  buttonWrapper: {
+    borderWidth: 1, // Dicke des Rands
+    borderColor: 'red',
+    color: 'red',
+    borderRadius: 5, // Rundung der Ecken
+    margin: 5, // Abstand zwischen den Buttons
+    overflow: 'hidden', // Stellt sicher, dass nichts herausragt
+  },
+  title: {
+    color: '#ffffff',
+    fontSize: 24,
+  },
+    header: {
+    color: '#ffffff',
+    fontSize: 24,
+    textAlign: 'center',
+    
+  },
+    button: {
+    borderWidth: 2,
+    borderColor: 'red',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'red',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 18
   },
 });
