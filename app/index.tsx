@@ -51,16 +51,20 @@ export default function HomeScreen() {
           data={data}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
-    <Link
-      style={styles.item}
-      href={{ pathname: "/modal", params: { id: item.id, name: item.name } }}
-    >
-      <Text style={styles.title}>{item.name}</Text>
-      <Text style={styles.title}> - </Text>
-      <Text style={styles.price}>{item.price}€</Text>
-    </Link>
-
-          )}
+          <Link
+            style={styles.item}
+            href={{ pathname: "/modal", params: { id: item.id, name: item.name } }}
+          >
+            <View style={styles.buttonWrapper}>
+              <View style={styles.nameBox}>
+                <Text style={styles.title}>{item.name}</Text>
+              </View>
+              <View style={styles.priceBox}>
+                <Text style={styles.price}>{item.price}€</Text>
+              </View>
+            </View>
+          </Link>
+            )}
         />
       </View>
       ):(
@@ -90,18 +94,29 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 24,
     textAlign: 'center',
-
   },
   price: {
     color: '#ffffff',
     fontSize: 24,
     width: '100%',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
-    background: {
+  background: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
   },
-
+  buttonWrapper: {
+    marginTop: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between', 
+    alignItems: 'center',
+  },
+  priceBox:{
+    flex: 0,
+    alignItems: 'flex-end'
+  },
+  nameBox:{
+    flex: 1
+  }
 });
