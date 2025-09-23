@@ -77,7 +77,7 @@ export default function ModalScreen() {
         <Text style={textStyles.header}>Details for {name}</Text>
       </View>
       <FlatList
-        data={data}
+        data={data.filter(item => item.quantity > 0)}        
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
          <View style={styles.item}>
