@@ -16,7 +16,6 @@ interface Variation {
 const VARIATIONS: Variation[] = [
   { id: 1, name: 'Variation 1', quantity: 5 },
   { id: 2, name: 'Variation 2', quantity: 3 },
-  // Mehr Variationen
 ];
 
 export default function ModalScreen() {
@@ -128,15 +127,15 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
   },
   addButton: {
-    width: 50,  // Quadratisch
+    width: 50,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
   },
   removeButton: {
-    width: 150, // 3-mal so breit
-    height: 50, // gleiche Höhe wie addButton
+    width: 150,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
