@@ -53,11 +53,6 @@ return (
       />
       <View style={styles.buttonContainer}>
             <View style={buttonStyles.buttonWrapper}>
-                <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
-                  <Text style={textStyles.buttonText}>Refresh</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={buttonStyles.buttonWrapper}>
                 <TouchableOpacity style={styles.refreshButton} onPress={handleSend}>
                   <Text style={textStyles.buttonText}>Save</Text>
                 </TouchableOpacity>
@@ -80,14 +75,15 @@ const styles = StyleSheet.create({
     height: '85%',
     borderColor: '#ccc',
     borderWidth: 1,
+    borderRadius: 8,
     padding: 10,
     marginBottom: 16,
-    textAlignVertical: 'top', // für multiline
-    backgroundColor: '#ffffff'
+    textAlignVertical: 'top', 
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 refreshButton: {
