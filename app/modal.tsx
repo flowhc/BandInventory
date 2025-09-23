@@ -3,6 +3,9 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LoadingScreen from '../components/loading';
+import { textStyles } from '../constants/styling';
+import { BASE_URL } from '../constants/variables';
+
 
 interface Variation {
   id: number;
@@ -22,12 +25,11 @@ export default function ModalScreen() {
   const [data, setData] = useState<Variation[]>(VARIATIONS);
   const [loading, setLoading] = useState(true);
 
-  const endpoint = 'http://localhost:8080/api/v1/products';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(endpoint +'/variation/'+ id);
+        const response = await axios.get(BASE_URL +'/variation/'+ id);
         setData(response.data);
         console.log("API VARIATIONS Call success")
       } catch (error) {
@@ -43,6 +45,7 @@ export default function ModalScreen() {
   }, []);
 
  const handlePress = async (variation: number, endpoint: string, increase: boolean) => {
+  setLoading(true);
   const bodyData = {
     id: id,
     variationId: variation,
@@ -56,6 +59,7 @@ export default function ModalScreen() {
       },
     });
     setData(response.data);
+    setLoading(false);
     console.log(response.data);
   } catch (error) {
     console.error('Fehler beim Abrufen der Daten:', error);
@@ -70,7 +74,7 @@ export default function ModalScreen() {
     >{!loading ? (
     <View style={styles.container}>
       <View style={styles.item}>
-        <Text style={styles.header}>Details for {name}</Text>
+        <Text style={textStyles.header}>Details for {name}</Text>
       </View>
       <FlatList
         data={data}
@@ -78,16 +82,16 @@ export default function ModalScreen() {
         renderItem={({ item }) => (
          <View style={styles.item}>
           <View style={styles.buttonContainer}>
-            <Text style={styles.title}>{item.name}: {item.quantity}</Text>
+            <Text style={textStyles.title}>{item.name}: {item.quantity}</Text>
             <View style={styles.buttonBox}>
               <View style={styles.buttonWrapper}>
-                <TouchableOpacity style={styles.removeButton} onPress={() => handlePress(item.id, endpoint, false)}>
-                  <Text style={styles.buttonText}>Remove</Text>
+                <TouchableOpacity style={styles.removeButton} onPress={() => handlePress(item.id, BASE_URL, false)}>
+                  <Text style={textStyles.buttonText}>Remove</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.buttonWrapper}>
-                <TouchableOpacity style={styles.addButton} onPress={() => handlePress(item.id, endpoint, true)}>
-                  <Text style={styles.buttonText}>Add</Text>
+                <TouchableOpacity style={styles.addButton} onPress={() => handlePress(item.id, BASE_URL, true)}>
+                  <Text style={textStyles.buttonText}>Add</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -119,6 +123,8 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
+    width: '100%',
+    height: '100%'
   },
   buttonContainer: {
     marginTop: 0,
@@ -133,29 +139,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 5, 
     overflow: 'hidden', 
-  },
-  title: {
-    color: '#ffffff',
-    fontSize: 24,
-  },
-  header: {
-    color: '#ffffff',
-    fontSize: 24,
-    textAlign: 'center',
-    
-  },
-  button: {
-    borderWidth: 2,
-    borderColor: 'red',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: 'red',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontSize: 18
   },
   addButton: {
     width: 50,  // Quadratisch
@@ -173,7 +156,7 @@ const styles = StyleSheet.create({
   },
   buttonBox:{
     marginTop: 0,
-    flexDirection: 'row', // Horizontale Ausrichtung der Kinder
+    flexDirection: 'row',
     justifyContent: 'flex-end'
   }
 });

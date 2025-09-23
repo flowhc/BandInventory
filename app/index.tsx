@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import LoadingScreen from '../components/loading';
-
+import { BASE_URL } from '../constants/variables';
 
 interface Item {
   id: number;
@@ -25,7 +25,7 @@ export default function HomeScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/products');
+        const response = await axios.get(BASE_URL);
         console.log(response.data);
         setData(response.data);
         console.log("API Call success")
@@ -42,9 +42,10 @@ export default function HomeScreen() {
   }, []);
 
  return (
-      <ImageBackground
+    <ImageBackground
       style={styles.background}
       source={require('../assets/images/background.jpg')}
+      resizeMode='cover'
     >{!loading ? (
       <View style={styles.container}>
         <FlatList
@@ -66,6 +67,14 @@ export default function HomeScreen() {
           </Link>
             )}
         />
+        <View >
+          <Link
+            style={styles.payPalItem}
+            href={{ pathname: "/payPalModal" }}
+          >
+            <Text style={styles.payPalTitle}> PayPal</Text>
+          </Link>
+        </View>
       </View>
       ):(
       <LoadingScreen/>  
@@ -86,9 +95,24 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: 15,
   },
+  payPalItem: {
+    width: '35%',
+    backgroundColor: '#ffffff',
+    padding: 20,
+    marginVertical: 40,
+    marginHorizontal: 40,
+    borderRadius: 15,
+    textAlign: 'center',
+  },
   title: {
     color: '#ffffff',
     fontSize: 24,
+  },  
+  payPalTitle: {
+    color: '#000000',
+    fontSize: 24,
+    fontWeight: 'bold',
+
   },  
   loadingTitle: {
     color: '#ffffff',
@@ -97,14 +121,17 @@ const styles = StyleSheet.create({
   },
   price: {
     color: '#ffffff',
+    marginLeft: 10,
     fontSize: 24,
-    width: '100%',
     fontWeight: 'bold',
+    
   },
   background: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
+    width: '100%',
+    height: '100%'
   },
   buttonWrapper: {
     marginTop: 0,
@@ -117,6 +144,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   nameBox:{
-    flex: 1
+    flex: 1,
+    alignItems: 'flex-start'
   }
 });

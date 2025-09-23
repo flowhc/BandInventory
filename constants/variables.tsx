@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://bandinventoryservice-gmawd3enewefbhf5.northeurope-01.azurewebsites.net/api/v1/products';

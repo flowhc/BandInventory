@@ -16,6 +16,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: false  }} />
+        <Stack.Screen name="payPalModal" options={{ presentation: 'modal', headerShown: false  }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
