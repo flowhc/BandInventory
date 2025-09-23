@@ -3,7 +3,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LoadingScreen from '../components/loading';
-import { textStyles } from '../constants/styling';
+import { buttonStyles, textStyles } from '../constants/styling';
 import { BASE_URL } from '../constants/variables';
 
 
@@ -84,14 +84,9 @@ export default function ModalScreen() {
           <View style={styles.buttonContainer}>
             <Text style={textStyles.title}>{item.name}: {item.quantity}</Text>
             <View style={styles.buttonBox}>
-              <View style={styles.buttonWrapper}>
+              <View style={buttonStyles.buttonWrapper}>
                 <TouchableOpacity style={styles.removeButton} onPress={() => handlePress(item.id, BASE_URL, false)}>
-                  <Text style={textStyles.buttonText}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.buttonWrapper}>
-                <TouchableOpacity style={styles.addButton} onPress={() => handlePress(item.id, BASE_URL, true)}>
-                  <Text style={textStyles.buttonText}>Add</Text>
+                  <Text style={textStyles.buttonText}>Sell</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -131,14 +126,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
-  },
-  buttonWrapper: {
-    borderWidth: 1, 
-    borderColor: 'red',
-    color: 'red',
-    borderRadius: 5,
-    margin: 5, 
-    overflow: 'hidden', 
   },
   addButton: {
     width: 50,  // Quadratisch

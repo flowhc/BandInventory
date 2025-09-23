@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LoadingScreen from '../components/loading';
 import { BASE_URL } from '../constants/variables';
 
@@ -23,7 +23,10 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    fetchData();
+  }, []);
+
+const fetchData = async () => {
       try {
         const response = await axios.get(BASE_URL);
         console.log(response.data);
@@ -38,8 +41,6 @@ export default function HomeScreen() {
 
       }
     };
-    fetchData();
-  }, []);
 
  return (
     <ImageBackground
@@ -67,13 +68,22 @@ export default function HomeScreen() {
           </Link>
             )}
         />
-        <View >
+        <View style={styles.buttonWrapper}>
           <Link
             style={styles.payPalItem}
             href={{ pathname: "/payPalModal" }}
           >
             <Text style={styles.payPalTitle}> PayPal</Text>
           </Link>
+          <Link
+            style={styles.payPalItem}
+            href={{ pathname: "/editModal" }}
+          >
+            <Text style={styles.payPalTitle}> Edit</Text>
+          </Link>
+          <TouchableOpacity style={styles.payPalItem} onPress={fetchData}>
+            <Text style={styles.payPalTitle}> Reload</Text>
+          </TouchableOpacity>
         </View>
       </View>
       ):(
@@ -96,11 +106,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   payPalItem: {
-    width: '35%',
+    
     backgroundColor: '#ffffff',
-    padding: 20,
+    padding: 15,
     marginVertical: 40,
-    marginHorizontal: 40,
+    marginHorizontal:  10,
     borderRadius: 15,
     textAlign: 'center',
   },
@@ -136,7 +146,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 0,
     flexDirection: 'row',
-    justifyContent: 'space-between', 
+    justifyContent: 'space-around', 
     alignItems: 'center',
   },
   priceBox:{

@@ -17,6 +17,7 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: false  }} />
         <Stack.Screen name="payPalModal" options={{ presentation: 'modal', headerShown: false  }} />
+        <Stack.Screen name="editModal" options={{ presentation: 'modal', headerShown: false  }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
