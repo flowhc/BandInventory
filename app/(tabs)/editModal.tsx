@@ -2,8 +2,8 @@ import { BASE_URL } from '@/constants/variables';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Alert, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import LoadingScreen from '../components/loading';
-import { buttonStyles, commonStyles, textStyles } from '../constants/styling';
+import LoadingScreen from '../../components/loading';
+import { buttonStyles, commonStyles, textStyles } from '../../constants/styling';
 
 export default function EditModal() {
   const [jsonText, setJsonText] = useState('');
@@ -40,7 +40,7 @@ export default function EditModal() {
 return (
 <ImageBackground
       style={commonStyles.background}
-      source={require('../assets/images/background.jpg')}
+      source={require('../../assets/images/background.jpg')}
     >{!loading ? (
     <View style={styles.container}>
       <TextInput

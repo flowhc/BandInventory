@@ -2,8 +2,8 @@ import axios from 'axios';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import LoadingScreen from '../components/loading';
-import { BASE_URL } from '../constants/variables';
+import LoadingScreen from '../../components/loading';
+import { BASE_URL } from '../../constants/variables';
 
 interface Item {
   id: number;
@@ -45,7 +45,7 @@ const fetchData = async () => {
  return (
     <ImageBackground
       style={styles.background}
-      source={require('../assets/images/background.jpg')}
+      source={require('../../assets/images/background.jpg')}
       resizeMode='cover'
     >{!loading ? (
       <View style={styles.container}>
@@ -69,18 +69,6 @@ const fetchData = async () => {
             )}
         />
         <View style={styles.buttonWrapper}>
-          <Link
-            style={styles.payPalItem}
-            href={{ pathname: "/payPalModal" }}
-          >
-            <Text style={styles.payPalTitle}> PayPal</Text>
-          </Link>
-          <Link
-            style={styles.payPalItem}
-            href={{ pathname: "/editModal" }}
-          >
-            <Text style={styles.payPalTitle}> Edit</Text>
-          </Link>
           <TouchableOpacity style={styles.payPalItem} onPress={fetchData}>
             <Text style={styles.payPalTitle}> Reload</Text>
           </TouchableOpacity>

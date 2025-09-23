@@ -18,11 +18,11 @@ export default function ModalScreen() {
   return (
     <ImageBackground
       style={styles.background}
-      source={require('../assets/images/background.jpg')}
+      source={require('../../assets/images/background.jpg')}
     >
       <Image
         style={styles.image}
-        source={require('../assets/images/paypal.jpg')}
+        source={require('../../assets/images/paypal.jpg')}
         contentFit="cover"
       />
     </ImageBackground>
