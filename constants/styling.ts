@@ -17,6 +17,7 @@ header: {
     textAlign: 'center',    
     },
 title: {
+    paddingVertical: 10,
     color: '#ffffff',
     fontSize: 24,
     },
