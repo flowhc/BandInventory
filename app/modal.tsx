@@ -38,7 +38,7 @@ export default function ModalScreen() {
                   <View style={buttonStyles.buttonWrapper}>
                     <TouchableOpacity style={styles.removeButton} onPress={() => updateVariation(id.toString(), item.id.toString(), false)}>
                       <Text style={textStyles.buttonText}>Sell</Text>
-                    </TouchableOpacity>):(
+                    </TouchableOpacity>
                   </View>
                 ):(
                  <Text style={textStyles.buttonText}>Sold Out</Text>
