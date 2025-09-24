@@ -1,46 +1,14 @@
-import axios from 'axios';
 import { Link } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import LoadingScreen from '../../components/loading';
-import { BASE_URL } from '../../constants/variables';
+import { StorageContext } from '../context/appProvider';
 
-interface Item {
-  id: number;
-  name: string;
-  price: string;
-}
-
-const DATA: Item[] = [
-  { id: 1, name: 'Item 1', price: '$10.00' },
-  { id: 2, name: 'Item 2', price: '$20.00' },
-  // Weitere einfügen
-];
 
 export default function HomeScreen() {
+    const { storage, updateItems } = useContext(StorageContext); 
 
-  const [data, setData] = useState<Item[]>(DATA);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-const fetchData = async () => {
-      try {
-        const response = await axios.get(BASE_URL);
-        console.log(response.data);
-        setData(response.data);
-        console.log("API Call success")
-      } catch (error) {
-        console.log("API Call crashed")
-        console.error(error);
-      } finally {
-        setLoading(false);
-        console.log("API Call success 2")
-
-      }
-    };
+  const [loading, setLoading] = useState(false);
 
  return (
     <ImageBackground
@@ -50,7 +18,7 @@ const fetchData = async () => {
     >{!loading ? (
       <View style={styles.container}>
         <FlatList
-          data={data}
+          data={storage}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
           <Link
@@ -68,11 +36,6 @@ const fetchData = async () => {
           </Link>
             )}
         />
-        <View style={styles.buttonWrapper}>
-          <TouchableOpacity style={styles.payPalItem} onPress={fetchData}>
-            <Text style={styles.payPalTitle}> Reload</Text>
-          </TouchableOpacity>
-        </View>
       </View>
       ):(
       <LoadingScreen/>  

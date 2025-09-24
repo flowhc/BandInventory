@@ -1,70 +1,21 @@
-import axios from 'axios';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LoadingScreen from '../components/loading';
 import { buttonStyles, textStyles } from '../constants/styling';
-import { BASE_URL } from '../constants/variables';
-
-
-interface Variation {
-  id: number;
-  name: string;
-  quantity: number;
-}
-
-const VARIATIONS: Variation[] = [
-  { id: 1, name: 'Variation 1', quantity: 5 },
-  { id: 2, name: 'Variation 2', quantity: 3 },
-];
+import { StorageContext } from './context/appProvider';
+import { Variation } from './type/types';
 
 export default function ModalScreen() {
-
+  const { storage, updateVariation } = useContext(StorageContext); 
   const {id, name}  = useLocalSearchParams();
-  const [data, setData] = useState<Variation[]>(VARIATIONS);
-  const [loading, setLoading] = useState(true);
-
+  const [data, setData] = useState<Variation[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(BASE_URL +'/variation/'+ id);
-        setData(response.data);
-        console.log("API VARIATIONS Call success")
-      } catch (error) {
-        console.log("API VARIATIONS Call crashed")
-        console.error(error);
-      } finally {
-        setLoading(false);
-        console.log("API VARIATIONS Call success 2")
-
-      }
-    };
-    fetchData();
-  }, []);
-
- const handlePress = async (variation: number, endpoint: string, increase: boolean) => {
-  setLoading(true);
-  const bodyData = {
-    id: id,
-    variationId: variation,
-    increase: increase
-  };
-
-  try {
-    const response = await axios.post(endpoint, bodyData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    setData(response.data);
-    setLoading(false);
-    console.log(response.data);
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Daten:', error);
-  }
-};
-
+    const item = storage.find(i => i.id.toString() === id);
+    setData(item? item.variations : [])
+  }, [id, storage]);
 
   return (
     <ImageBackground
@@ -76,7 +27,8 @@ export default function ModalScreen() {
         <Text style={textStyles.header}>Details for {name}</Text>
       </View>
       <FlatList
-        data={data.filter(item => item.quantity > 0)}        
+        //data={data.filter(item => item.quantity > 0)}        
+        data={data}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
          <View style={styles.item}>
@@ -84,7 +36,7 @@ export default function ModalScreen() {
             <Text style={textStyles.title}>{item.name}: {item.quantity}</Text>
             <View style={styles.buttonBox}>
               <View style={buttonStyles.buttonWrapper}>
-                <TouchableOpacity style={styles.removeButton} onPress={() => handlePress(item.id, BASE_URL, false)}>
+                <TouchableOpacity style={styles.removeButton} onPress={() => updateVariation(id.toString(), item.id.toString(), false)}>
                   <Text style={textStyles.buttonText}>Sell</Text>
                 </TouchableOpacity>
               </View>

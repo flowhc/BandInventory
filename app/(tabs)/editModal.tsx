@@ -1,41 +1,26 @@
-import { BASE_URL } from '@/constants/variables';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Alert, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import LoadingScreen from '../../components/loading';
 import { buttonStyles, commonStyles, textStyles } from '../../constants/styling';
+import { StorageContext } from '../context/appProvider';
+
 
 export default function EditModal() {
+  const { storage, updateStorage, updateItems } = useContext(StorageContext); 
+
   const [jsonText, setJsonText] = useState('');
   const [loading, setLoading] = useState(false);
   
   useEffect(() => {
-    handleRefresh();
-  }, []);
+    setJsonText(JSON.stringify(storage));
+  }, [storage]);
 
-  const handleSend = async () => {
-    setLoading(true);
-    try {
-        const jsonData = await axios.post(BASE_URL +'/withVariation',JSON.parse(jsonText));
-        console.log("Current JSON:", jsonText);
-        setJsonText(JSON.stringify(jsonData.data));    
-    } catch (error) {
-        Alert.alert('Ungültiges JSON', 'Bitte stellen Sie sicher, dass der JSON-Text im richtigen Format ist.');
-    }
-    setLoading(false);
-  };
-
-  const handleRefresh = async () => {
-    setLoading(true);
-    try {
-        const jsonData = await axios.get(BASE_URL +'/withVariation');
-        console.log("Current JSON:", jsonText);
-        setJsonText(JSON.stringify(jsonData.data));
-    } catch (error) {
-        Alert.alert('Ungültiges JSON', 'Bitte stellen Sie sicher, dass der JSON-Text im richtigen Format ist.');
-    }
-    setLoading(false);
-  };
+  const handleSend = () =>{
+    console.log("save json: " + jsonText);
+    updateStorage(JSON.parse(jsonText));
+    console.log("storage ist nowq: " + JSON.stringify(storage));
+    //updateItems();
+  }
 
 return (
 <ImageBackground
