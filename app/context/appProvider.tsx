@@ -4,17 +4,18 @@ import { BASE_URL } from '../../constants/variables';
 import { Item, Variation } from '../type/types';
 
 
-const DATA: Item[] = [];
 
 interface StorageContextType {
   storage: Item[];
+  isLoading: boolean;
   updateStorage: (items:Item[]) => void;
   updateItems: () => Promise<void>;
   updateVariation: (id: string, variationId: string, increase: boolean) => void;
 }
 
 export const StorageContext = createContext<StorageContextType>({
-  storage: DATA,
+  storage: [],
+  isLoading: false,
   updateStorage: () => {},
   updateItems: async () => {},
   updateVariation: async () => {}
@@ -26,6 +27,7 @@ interface StorageProviderProps {
 
 export const StorageProvider: FC<StorageProviderProps> = ({ children }) => {
   const [storage, setStorage] = useState<Item[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const updateStorage = (items: Item[]) =>{
     updateData(items);
@@ -41,6 +43,7 @@ export const StorageProvider: FC<StorageProviderProps> = ({ children }) => {
 
   const fetchData = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(BASE_URL+ '/withVariation');
         console.log(response.data);
         setStorage(response.data);
@@ -49,13 +52,14 @@ export const StorageProvider: FC<StorageProviderProps> = ({ children }) => {
         console.log("API Call crashed")
         console.error(error);
       } finally {
-        //setLoading(false);
+        setIsLoading(false);
         console.log("API Call success 2")
       }
     };
 
   const updateData = async (items: Item[]) => {
       try {
+        setIsLoading(true);
         const response = await axios.post(BASE_URL+ '/withVariation', items);
         console.log(response.data);
         setStorage(response.data);
@@ -64,7 +68,7 @@ export const StorageProvider: FC<StorageProviderProps> = ({ children }) => {
         console.log("API Call crashed")
         console.error(error);
       } finally {
-        //setLoading(false);
+        setIsLoading(false);
         console.log("API Call success 2")
 
       }
@@ -79,6 +83,7 @@ export const StorageProvider: FC<StorageProviderProps> = ({ children }) => {
     };
 
     try {
+      setIsLoading(true);
       const response = await axios.post(BASE_URL, bodyData, {
         headers: {
           'Content-Type': 'application/json',
@@ -88,6 +93,8 @@ export const StorageProvider: FC<StorageProviderProps> = ({ children }) => {
       updateItemVariations(id, response.data)
     } catch (error) {
       console.error('Fehler beim Abrufen der Daten:', error);
+    }finally{
+      setIsLoading(false);
     }
 };
 
@@ -96,7 +103,7 @@ export const StorageProvider: FC<StorageProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <StorageContext.Provider value={{ storage, updateStorage: updateStorage, updateItems: fetchData, updateVariation: handleVariationCountChange }}>
+    <StorageContext.Provider value={{ storage, updateStorage: updateStorage, updateItems: fetchData, updateVariation: handleVariationCountChange, isLoading }}>
       {children}
     </StorageContext.Provider>
   );

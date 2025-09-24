@@ -7,10 +7,9 @@ import { StorageContext } from './context/appProvider';
 import { Variation } from './type/types';
 
 export default function ModalScreen() {
-  const { storage, updateVariation } = useContext(StorageContext); 
+  const { storage, updateVariation, isLoading } = useContext(StorageContext); 
   const {id, name}  = useLocalSearchParams();
   const [data, setData] = useState<Variation[]>([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const item = storage.find(i => i.id.toString() === id);
@@ -21,7 +20,7 @@ export default function ModalScreen() {
     <ImageBackground
       style={styles.background}
       source={require('../assets/images/background.jpg')}
-    >{!loading ? (
+    >{!isLoading ? (
     <View style={styles.container}>
       <View style={styles.item}>
         <Text style={textStyles.header}>Details for {name}</Text>

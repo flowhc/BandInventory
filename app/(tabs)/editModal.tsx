@@ -6,10 +6,8 @@ import { StorageContext } from '../context/appProvider';
 
 
 export default function EditModal() {
-  const { storage, updateStorage, updateItems } = useContext(StorageContext); 
-
+  const { storage, updateStorage, isLoading } = useContext(StorageContext); 
   const [jsonText, setJsonText] = useState('');
-  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     setJsonText(JSON.stringify(storage));
@@ -26,7 +24,7 @@ return (
 <ImageBackground
       style={commonStyles.background}
       source={require('../../assets/images/background.jpg')}
-    >{!loading ? (
+    >{!isLoading ? (
     <View style={styles.container}>
       <TextInput
         style={styles.textInput}

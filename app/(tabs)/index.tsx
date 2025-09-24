@@ -1,21 +1,19 @@
 import { Link } from 'expo-router';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import LoadingScreen from '../../components/loading';
 import { StorageContext } from '../context/appProvider';
 
 
 export default function HomeScreen() {
-    const { storage, updateItems } = useContext(StorageContext); 
-
-  const [loading, setLoading] = useState(false);
+  const { storage, isLoading } = useContext(StorageContext); 
 
  return (
     <ImageBackground
       style={styles.background}
       source={require('../../assets/images/background.jpg')}
       resizeMode='cover'
-    >{!loading ? (
+    >{!isLoading ? (
       <View style={styles.container}>
         <FlatList
           data={storage}
